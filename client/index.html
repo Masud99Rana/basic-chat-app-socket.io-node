@@ -26,6 +26,12 @@
   <script>
     var socket = io();
 
+    // localStorage.setItem('token',d.token);
+    // const socket = io({
+    //   auth: {
+    //     token: localStorage.getItem('token')
+    //   }
+    // });
 
     let form = document.querySelector('form.myForm');
     let msgList = document.querySelector('ul.msgList');
@@ -37,7 +43,11 @@
 
       let message = msgField.value;
 
-      socket.emit('clientEvent', message); // speak
+      // send message
+      // socket.emit('clientEvent', message); // speak
+
+      // send room name
+      socket.emit('groupNameEvent', message);
 
       // Empty field
       msgField.value = "";
@@ -47,6 +57,12 @@
     socket.on('serverEvent', (payload) => {
       console.log("payload->", payload);
       msgList.innerHTML += `<li>${payload}</li>`;
+    });
+
+    // listen from room event
+    socket.on('OkRoomServerEvent', (...args) => {
+      console.log('OkRoomServerEvent Received', args);
+      msgList.innerHTML += `<li>${args}</li>`;
     });
 
   </script>
